@@ -1,0 +1,145 @@
+<html>
+<head>
+<title>The Alloy Analyzer</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<STYLE TYPE="text/css">
+<!--
+P { margin-top: 5px; margin-bottom:5px; }
+-->
+h1 {
+	font-family: 'Helvetica';
+	border-bottom: 3px solid #ff6766;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 17px;
+	text-align: left;
+	color: #6d6a6a;
+}
+a {
+	color: #1799d6;	
+	font-family: 'Helvetica';
+}
+
+a:hover {
+	color: #1799d6;
+}
+
+p {
+	color: #282B2B;
+	font-family: 'Helvetica';
+	font-size: 12px;
+	line-height: 13px;
+}
+
+h2 {
+	font-family: 'verdana';
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 13px;
+	text-align: left;
+	margin:0;
+	margin-left: 1cm;
+	padding-left: 0.5cm;
+	border-left: 3px solid #b1b3b5;
+}
+
+ol {
+    counter-reset: li; /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    *list-style: decimal; /* Keep using default numbering for IE6/7 */
+    font: 15px 'trebuchet MS', 'lucida sans';
+    padding: 0;
+    margin-bottom: 4em;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+ol ol {
+    margin: 0 0 0 2em; /* Add some left margin for inner lists */
+}
+
+h3 {
+	font-family: 'Helvetica';
+	border-bottom: 1px dashed #ff6766;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 17px;
+	text-align: left;
+	color: #6d6a6a;
+}
+
+h4 {
+	font-family: 'Helvetica';
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 25px;
+	margin: 5px;
+	text-align: center;
+	color: 668899;
+}
+
+h5 {
+    border-bottom: 1px dashed #8c8b8b;
+}
+
+</STYLE>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<h4>AUnit Tutorial</font><font color=#536d7a><br><strong>Test Execution</strong></h4>
+
+<h1> How to execute an AUnit test?</h1>
+<p>Since a test case is a pair (valuation, command), to execute a test case we use the Alloy Analyzer to execute the test case's command.<br>
+A test case <em>passes</em> if the valuation is a valid instance of the command. Otherwise, the test <em>fails.</em><br><br>
+It is possible to use this format to test for a wide array of behavior of the model. Consider some of the test cases outlined below.</p>
+
+<h3>Our Alloy Model Under Test</h3>
+<p>Remember our Alloy model from the "What is a Test Case?" section:</p>
+<h2>
+<b><font color =#2c35e8>one sig</font></b> Set { first: <b><font color =#2c35e8>lone</font></b> Object }<br><br>
+<b><font color =#2c35e8>sig</font></b> Object { link: <b><font color =#2c35e8>lone</font></b> Object }<br><br>
+<b><font color =#2c35e8>pred</font></b> allObjectsInSet {<br>
+&nbsp &nbsp &nbsp<b><font color =#2c35e8>all</font></b> o : Object | o <b><font color =#2c35e8>in</font></b> Set.*first<br>
+}<br>
+</h2>
+
+<h3>Example Test Case Executions</h3>
+<p><b><u>A passing test:</br></p>
+<h2>
+<b><font color =#2c35e8>val</font></b> ObjectDisconnected { <br>
+ &nbsp &nbsp &nbsp<b><font color =#2c35e8>some disj</font></b>  Set1 : Set | <b><font color =#2c35e8>some disj</font></b>  Obj1, Obj2 : Object {<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Set = Set1<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Object = Obj1 + Obj2<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp first = Set1->Obj1<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp link = <b><font color =#2c35e8>none</font></b>  -> <b><font color =#2c35e8>none</font></b> <br>
+ &nbsp &nbsp &nbsp}<br>
+}<br><br>
+<b><font color =#2c35e8>run</font></b> { !allObjectsInSet[] <b><font color =#2c35e8>and</font></b> ObjectDisconnected } <br>
+</h2>
+<p><b>note:</b> The command of the test case is the negation of the "allObjectsInSet" predicate; therefore, this test case looks for the valuation to <em>not</em> be a possible solution to the predicate "allObjectsInSet". </p>
+<h5></h5>
+<p><b><u>A failing test:</br></p>
+<h2>
+<b><font color =#2c35e8>val</font></b> ObjectDisconnected { <br>
+ &nbsp &nbsp &nbsp<b><font color =#2c35e8>some disj</font></b>  Set1 : Set | <b><font color =#2c35e8>some disj</font></b>  Obj1, Obj2 : Object {<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Set = Set1<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Object = Obj1 + Obj2<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp first = Set1->Obj1<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp link =  Obj1->Obj2 <br>
+ &nbsp &nbsp &nbsp}<br>
+}<br><br>
+<b><font color =#2c35e8>run</font></b> { !allObjectsInSet[] <b><font color =#2c35e8>and</font></b> ObjectDisconnected } <br>
+</h2>
+<h5></h5>
+<p><b><u>A passing test exploring the facts:</u></b><br>
+<u>Remember:</u> The facts of a model are always under test because any instance found over a model must satisfy the facts. Facts can be explicitly declared in "fact" paragraphs or implicitly declared (e.g. multiplicity constraints for signatures and relations). This should be taken into account for all test cases. A test which <em>just</em> invokes a valuation is checking the behavior of the valuation over all facts of the model.</p>
+<h2>
+<b><font color =#2c35e8>val</font></b> NoSet { <br>
+ &nbsp &nbsp &nbsp<b><font color =#2c35e8>no</font></b> Set<br>
+ }<br>
+<b><font color =#2c35e8>run</font></b> NoSet <b><font color =#2c35e8>expect</b></font> 0<br>
+
+</h2>
+<p><b>note:</b> The "expect 0" clause means that there should be no solution to the command and is used by the tester to should that she expects the valuation to violate the facts of the model.</p>
+
+</body>
+</html>

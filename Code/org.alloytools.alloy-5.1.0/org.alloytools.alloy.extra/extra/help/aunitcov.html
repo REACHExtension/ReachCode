@@ -1,0 +1,142 @@
+<html>
+<head>
+<title>The Alloy Analyzer</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<STYLE TYPE="text/css">
+<!--
+P { margin-top: 5px; margin-bottom:5px; }
+-->
+h1 {
+	font-family: 'Helvetica';
+	border-bottom: 3px solid #ff6766;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 17px;
+	text-align: left;
+	color: #6d6a6a;
+}
+a {
+	color: #1799d6;	
+	font-family: 'Helvetica';
+}
+
+a:hover {
+	color: #1799d6;
+}
+
+p {
+	color: #282B2B;
+	font-family: 'Helvetica';
+	font-size: 12px;
+	line-height: 13px;
+}
+
+h2 {
+	font-family: 'verdana';
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 13px;
+	text-align: left;
+	margin:0;
+	margin-left: 1cm;
+	padding-left: 0.5cm;
+	border-left: 3px solid #b1b3b5;
+}
+
+ol {
+    counter-reset: li; /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    *list-style: decimal; /* Keep using default numbering for IE6/7 */
+    font: 15px 'trebuchet MS', 'lucida sans';
+    padding: 0;
+    margin-bottom: 4em;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+ol ol {
+    margin: 0 0 0 2em; /* Add some left margin for inner lists */
+}
+
+h3 {
+	font-family: 'Helvetica';
+	border-bottom: 1px dashed #ff6766;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 17px;
+	text-align: left;
+	color: #6d6a6a;
+}
+
+h4 {
+	font-family: 'Helvetica';
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 25px;
+	margin: 5px;
+	text-align: center;
+	color: 668899;
+}
+
+h5 {
+    border-bottom: 1px dashed #8c8b8b;
+}
+
+</STYLE>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<h4>AUnit Tutorial</font><font color=#536d7a><br><strong>AUnit Coverage</strong></h4>
+
+<h1>What is Coverage in AUnit?</h1>
+<p> When a test case is execute: What part of the model can be covered? What should that coverage criteria look like?<br>
+In this section we will outline:<br>
+ &nbsp &nbsp &nbsp a. What are the coverage criteria in Alloy?<br>
+ &nbsp &nbsp &nbsp b. How a test case's execution covers these criteria.<br>
+ &nbsp &nbsp &nbsp c. How coverage is displayed in the Alloy Analyzer.</p>
+</p>
+
+<h3>Coverage Criteria</h3>
+<p>We consider criteria over 4 main structures within Alloy models: signatures. relations, expression and formulas.</p>
+<p><b><u>Signature s Criteria:</b></u><br>
+ &nbsp &nbsp &nbsp 1. |s| = 0 (empty set)<br>
+ &nbsp &nbsp &nbsp 2. |s| = 1 (singleton set)<br>
+ &nbsp &nbsp &nbsp 3. |s| &gt; 1 (no empty, no singleton set)</p>
+ 
+ <p><b><u>Relation r Criteria:</b></u><br>
+ &nbsp &nbsp &nbsp 1. |r| = 0 (empty set)<br>
+ &nbsp &nbsp &nbsp 2. |r| = 1 (singleton set)<br>
+ &nbsp &nbsp &nbsp 3. |r| &gt; 1 (no empty, no singleton set)</p>
+ 
+ <p><b><u>Expression e Criteria:</b></u><br>
+ &nbsp &nbsp &nbsp 1. |e| = 0 (empty set)<br>
+ &nbsp &nbsp &nbsp 2. |e| = 1 (singleton set)<br>
+ &nbsp &nbsp &nbsp 3. |e| &gt; 1 (no empty, no singleton set)</p>
+ 
+<p><b><u>Formula f Criteria:</b></u><br>
+ &nbsp &nbsp &nbsp 1. f = true <br>
+ &nbsp &nbsp &nbsp 2. f = false <br>
+<em>Additionally</em>, for quantified formulas ("q v : d | b") where q = quantifier, v = variable, d = domain, b = subformula:<br>
+ &nbsp &nbsp &nbsp 3. |d| = 0 <br>
+ &nbsp &nbsp &nbsp 4. |d| = 1, b = true <br>
+ &nbsp &nbsp &nbsp 5. |d| = 1, b = false <br>
+ &nbsp &nbsp &nbsp 6. |d| &gt; 1, b = true <br>
+ &nbsp &nbsp &nbsp 7. |d| &gt; 1, b = false <br>
+ &nbsp &nbsp &nbsp 8. |d| &gt; 1, b = true & false <br></p>
+ 
+<h3>How a test case's execution covers these criteria</h3>
+<p>When a test case is execute, coverage is calculated for:<br>
+ &nbsp &nbsp &nbsp a. All signatures in the model <br>
+ &nbsp &nbsp &nbsp b. All relation in the model <br>
+ &nbsp &nbsp &nbsp c. All expression and formulas in the facts <br>
+ &nbsp &nbsp &nbsp d. All expression and formulas in any predicates invoked in the test case's command. </p>
+</p>
+ 
+<h3>How Coverage is Displayed</h3>
+<p>Coverage is displayed in two ways:<br>
+ &nbsp &nbsp &nbsp a. Highlighting the model: green means covered, yellow means partially covered, and red means not covered. <br>
+ &nbsp &nbsp &nbsp b. Coverage displayed by paragraph on the "Coverage Result" tab. This coverage is broken down my paragraph and each view can be expanded to show which specific criteria have or have not been covered.<br>
+</p>
+ 
+
+ </body>
+</html>

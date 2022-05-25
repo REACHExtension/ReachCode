@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>The Alloy Analyzer</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<STYLE TYPE="text/css">
+<!--
+P { margin-top: 5px; margin-bottom:5px; }
+-->
+h1 {
+	font-family: 'Helvetica';
+	border-bottom: 3px solid #ff6766;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 17px;
+	text-align: left;
+	color: #6d6a6a;
+}
+a {
+	color: #1799d6;	
+	font-family: 'Helvetica';
+}
+
+a:hover {
+	color: #1799d6;
+}
+
+p {
+	color: #282B2B;
+	font-family: 'Helvetica';
+	font-size: 12px;
+	line-height: 13px;
+}
+
+h2 {
+	font-family: 'verdana';
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 13px;
+	text-align: left;
+	margin-left: 1cm;
+	padding-left: 0.5cm;
+	border-left: 3px solid #b1b3b5;
+}
+
+ol {
+    counter-reset: li; /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    *list-style: decimal; /* Keep using default numbering for IE6/7 */
+    font: 15px 'trebuchet MS', 'lucida sans';
+    padding: 0;
+    margin-bottom: 4em;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+ol ol {
+    margin: 0 0 0 2em; /* Add some left margin for inner lists */
+}
+
+h3 {
+	font-family: 'Helvetica';
+	border-bottom: 1px dashed #ff6766;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 17px;
+	text-align: left;
+	color: #6d6a6a;
+}
+
+h4 {
+	font-family: 'Helvetica';
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 25px;
+	margin: 5px;
+	text-align: center;
+	color: 668899;
+}
+
+h5 {
+    border-bottom: 1px dashed #8c8b8b;
+}
+
+</STYLE>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<h4>AUnit Tutorial</font><font color=#536d7a><br><strong>What is a Test Case?</strong></h4>
+
+<h1> What is an AUnit Test Case?</h1>
+<p>An AUnit test case is a pair (valuation, command) where:<br>
+<b>&nbsp&nbsp&nbsp&nbsp A valuation is:</b> an assignment of values to the <em>sets</em> and <em>relations</em> of the model.<br>
+<b>&nbsp&nbsp&nbsp&nbsp A command is:</b> any valid Alloy command over the model.</p>
+
+
+<h3>Example Test Case</h3>
+<p>To see this in action, consider the following Alloy model:</p>
+<h2>
+<b><font color =#2c35e8>one sig</font></b> Set { first: <b><font color =#2c35e8>lone</font></b> Object }<br><br>
+<b><font color =#2c35e8>sig</font></b> Object { link: <b><font color =#2c35e8>lone</font></b> Object }<br><br>
+<b><font color =#2c35e8>pred</font></b> allObjectsInSet {<br>
+&nbsp &nbsp &nbsp<b><font color =#2c35e8>all</font></b> o : Object | o <b><font color =#2c35e8>in</font></b> Set.*first<br>
+}<br>
+</h2>
+<h5></h5>
+<p><b>Example of a Valuation:</b><br>
+<u>Visual representation:</p>
+<p><u>Textual representation:</p>
+<h2>
+<b><font color =#2c35e8>val</font></b> ObjectDisconnected { <br>
+ &nbsp &nbsp &nbsp<b><font color =#2c35e8>some disj</font></b>  Set1 : Set | <b><font color =#2c35e8>some disj</font></b>  Obj1, Obj2 : Object {<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Set = Set1<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Object = Obj1 + Obj2<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp first = Set1->Obj1<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp link = <b><font color =#2c35e8>none</font></b>  -> <b><font color =#2c35e8>none</font></b> <br>
+ &nbsp &nbsp &nbsp}<br>
+}<br>
+</h2>
+<p><b>note:</b> the textual representation shows how a valuation is simply stating directly the values the signatures and relations within the model should take. The valuation portion of the test case can be thought of as a specific instance that you want to test your model over. This may be a satisfying instance or not, the anticipated behavior of this instance over your model is captured in the second component of a test case: the command. </p>
+<h5></h5>
+<p><b>Example of a command:</p>
+<h2>
+<b><font color =#2c35e8>run</font></b> { !allObjectsInSet[] <b><font color =#2c35e8>and</font></b> ObjectDisconnected } <br>
+</h2>
+
+<p><b>note:</b> The facts of the model are tested with every command, since the command is used to capture the behavior the tester <em>thinks</em> should occur for the instance she defined, which includes any facts. In this case, the tester believes that valuation "ObjectDisconnected" should NOT be produced as a instance for allObjectsInSet ("!allObjectsInSet[]").</p>
+</body>
+</html>

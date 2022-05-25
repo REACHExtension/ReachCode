@@ -1,0 +1,202 @@
+<html>
+<head>
+<title>The Alloy Analyzer</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<STYLE TYPE="text/css">
+<!--
+P { margin-top: 5px; margin-bottom:5px; }
+-->
+h1 {
+	font-family: 'Helvetica';
+	border-bottom: 3px solid #ff6766;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 17px;
+	text-align: left;
+	color: #6d6a6a;
+}
+a {
+	color: #1799d6;	
+	font-family: 'Helvetica';
+}
+
+a:hover {
+	color: #1799d6;
+}
+
+p {
+	color: #282B2B;
+	font-family: 'Helvetica';
+	font-size: 12px;
+	line-height: 13px;
+}
+
+h2 {
+	font-family: 'verdana';
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 13px;
+	text-align: left;
+	margin:0;
+	margin-left: 1cm;
+	padding-left: 0.5cm;
+	border-left: 3px solid #b1b3b5;
+}
+
+ol {
+    counter-reset: li; /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    *list-style: decimal; /* Keep using default numbering for IE6/7 */
+    font: 15px 'trebuchet MS', 'lucida sans';
+    padding: 0;
+    margin-bottom: 4em;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+ol ol {
+    margin: 0 0 0 2em; /* Add some left margin for inner lists */
+}
+
+h3 {
+	font-family: 'Helvetica';
+	border-bottom: 1px dashed #ff6766;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 17px;
+	text-align: left;
+	color: #6d6a6a;
+}
+
+h4 {
+	font-family: 'Helvetica';
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 25px;
+	margin: 5px;
+	text-align: center;
+	color: 668899;
+}
+
+h5 {
+    border-bottom: 1px dashed #8c8b8b;
+}
+
+</STYLE>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<h4>AUnit Tutorial</font><font color=#536d7a><br><strong>Adding Tests to the Analyzer</strong></h4>
+
+<h1>How to add a test case to the Alloy Analyzer</h1>
+<p>In order to add a test case to the Alloy Analyzer, we have added three new constructs to Alloy.<br>
+&nbsp &nbsp &nbsp &nbsp 1. "<b><font color =#2c35e8>val</font></b> " paragrahs: used to declare a valuation.<br>
+&nbsp &nbsp &nbsp &nbsp 2. "<b><font color =#68bbff>@cmd:</font></b> {}" label: used to denote a command within a val paragraph.<br>
+&nbsp &nbsp &nbsp &nbsp 3. "<b><font color =#68bbff>@test:</font></b>" label: used to denote which Alloy command(s) are a test case.<br><br>
+The remainder of this section of the tutorial will focus on demostrating how to use these constructs in the Alloy Analyzer to add your tests and execute them, using the following outline:<br>
+ &nbsp &nbsp &nbsp a. Declaring Valuations<br>
+ &nbsp &nbsp &nbsp b. Declaring Commands in Valuations (how to handle testing predicates with parameters)<br>
+ &nbsp &nbsp &nbsp c. Declaring an Alloy Command as a Test</p>
+
+<h3>Our Alloy Model Under Test</h3>
+<p>Remember our Alloy model from the "What is a Test Case?" section:</p>
+<h2>
+<b><font color =#2c35e8>one sig</font></b> Set { first: <b><font color =#2c35e8>lone</font></b> Object }<br><br>
+<b><font color =#2c35e8>sig</font></b> Object { link: <b><font color =#2c35e8>lone</font></b> Object }<br><br>
+<b><font color =#2c35e8>pred</font></b> allObjectsInSet {<br>
+&nbsp &nbsp &nbsp<b><font color =#2c35e8>all</font></b> o : Object | o <b><font color =#2c35e8>in</font></b> Set.*first<br>
+}<br>
+<b><font color =#2c35e8>pred</font></b> ObjectInSet[o : Object] {<br>
+&nbsp &nbsp &nbsp o <b><font color =#2c35e8>in</font></b> Set.*first<br>
+}<br>
+</h2>
+
+<h3>Declaring Valuations</h3>
+<p>Each test <b><em>must</b></em> invoke <b><em>exactly one</b></em> valuation. Valuations are captued in their own paragraphs using the "val" keyword. A valuation can be <em>complete</em> -- all sets and relations are specifically outlined in the valuation; or valuations can be <em>partially</em> captured -- you can use Alloy formulas to descibe desired behavior of a valuation and the Alloy Analyzer will generate a valuation matching the formulas, automatically filling in the structure of the valuation as needed.<br>
+<br>"val" declarations <b><u>cannot</u></b>: (1) share the same name as another valuation and (2) have parameters.</p>
+
+<p><b><u>Ex: A complete valuation:</br></p>
+<h2>
+<b><font color =#2c35e8>val</font></b> ObjectDisconnected { <br>
+ &nbsp &nbsp &nbsp<b><font color =#2c35e8>some disj</font></b>  Set1 : Set | <b><font color =#2c35e8>some disj</font></b>  Obj1, Obj2 : Object {<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Set = Set1<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Object = Obj1 + Obj2<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp first = Set1->Obj1<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp link = <b><font color =#2c35e8>none</font></b>  -> <b><font color =#2c35e8>none</font></b> <br>
+ &nbsp &nbsp &nbsp}<br>
+}<br><br>
+</h2>
+<p><b>note:</b> All signatures and relations of the Alloy model are explicitly outlined (sigs: Set, Object; rels: first, link).</p>
+
+<h5></h5>
+<p><b><u>Exs: Two partial valuation:</br></p>
+<h2>
+<b><font color =#2c35e8>val</font></b> NoSet { <br>
+ &nbsp &nbsp &nbsp <b><font color =#2c35e8>no</font></b> Set<br>
+ }<br>
+</h2>
+<br>
+<h2>
+<b><font color =#2c35e8>val</font></b> SomeObjects { <br>
+ &nbsp &nbsp &nbsp <b><font color =#2c35e8>some</font></b> Object<br>
+&nbsp &nbsp &nbsp Set.first <b><font color =#2c35e8>in</font></b> Object<br>
+ }<br>
+</h2>
+<p><b>note:</b> Alloy formulas are used to outline <em>some</em> constraints for the signatures and relations.</p>
+
+<h3>Declaring Commands in a Valuation</h3>
+<p>When a predicate you want to test has <em>parameters</em>, you have to invoke the predicate within the valuation, where the atoms you want to test are being outlined. To signal which formulas are meant to outline the valuation and which formulas are meant to be the command, we use the "<b><font color =#68bbff>@cmd:</font></b>{}" keyword, with all formulas meant to be the command encapsulated in the braces ("{}").</p>
+<p><b><u>Ex:</br></p>
+<h2>
+<b><font color =#2c35e8>val</font></b> ObjectDisconnected2 { <br>
+ &nbsp &nbsp &nbsp<b><font color =#2c35e8>some disj</font></b>  Set1 : Set | <b><font color =#2c35e8>some disj</font></b>  Obj1, Obj2 : Object {<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Set = Set1<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Object = Obj1 + Obj2<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp first = Set1->Obj1<br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp link = <b><font color =#2c35e8>none</font></b>  -> <b><font color =#2c35e8>none</font></b> <br>
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <b><font color =#68bbff>@cmd:</font></b> { ObjectInSet[Obj1] } <br>
+ &nbsp &nbsp &nbsp}<br>
+}<br><br>
+</h2>
+<p><b>note:</b> Anything within <b><font color =#68bbff>@cmd:</font></b>{} will be treated as the command component of a test case, while anything outside of that will be treated as the valuation declaration.</p>
+<h2>
+<b><font color =#2c35e8>val</font></b> SomeObjects2 { <br>
+ &nbsp &nbsp &nbsp <b><font color =#2c35e8>some</font></b> Object<br>
+&nbsp &nbsp &nbsp Set.first <b><font color =#2c35e8>in</font></b> Object<br>
+&nbsp &nbsp &nbsp <b><font color =#68bbff>@cmd:</font></b> { some o : Object | ObjectInSet[o] } <br>
+ }<br>
+</h2>
+
+<h3>Declaring an Alloy Command as a Test</h3>
+<p>We use the new keyword "<b><font color =#68bbff>@test:</font></b>" in front of an Alloy command intended to be a test case.<br>
+This Alloy command <b><em>must:</b></em><br>
+ &nbsp &nbsp &nbsp a. Invoke only <b>one</b> valuation.<br>
+ &nbsp &nbsp &nbsp b. Have a <b>unique</b> label name.<br>
+Things to know for AUnit commands: <br>
+ &nbsp &nbsp &nbsp a. Any formulas in the Alloy command that are not valuation invocations are treated as part of the Alloy test case's command.<br>
+ &nbsp &nbsp &nbsp b. Any valid Alloy command formula structures can be used, including expect clauses, specifying scopes, and forming formulas.
+ </p>
+
+<p><b><u>Ex AUnit Tests:</br></p>
+<h2>
+<b><font color =#68bbff>@test:</font></b> Test0: <b><font color =#2c35e8>run</font></b> { ObjectDisconneted <b><font color =#2c35e8>and</font></b> !AllObjectsInSet[]}
+</h2>
+<h2>
+<b><font color =#68bbff>@test:</font></b> Test1: <b><font color =#2c35e8>run</font></b> NoSet <b><font color =#2c35e8>expect</font></b> 0
+</h2>
+<h2>
+<b><font color =#68bbff>@test:</font></b> Test2: <b><font color =#2c35e8>run</font></b> { SomeObjects <b><font color =#2c35e8>and some</font></b> o : Object | ObjectInSet[o] }
+</h2>
+<h2>
+<b><font color =#68bbff>@test:</font></b> Test3: <b><font color =#2c35e8>run</font></b> SomeObjects2 
+</h2>
+<h2>
+<b><font color =#68bbff>@test:</font></b> Test4: <b><font color =#2c35e8>run</font></b> { ObjectDisconneted2 <b><font color =#2c35e8>and</font></b> !ObjectInSet[Obj2] }
+</h2>
+<p> The AUnit valuation, command pairs for the above tests are:<br>
+ &nbsp &nbsp &nbsp Test0: (ObjectDisconneted, Facts and !AllObjectsInSet[])<br>
+ &nbsp &nbsp &nbsp Test1: (NoSet, Facts) <br>
+ &nbsp &nbsp &nbsp Test2: (SomeObjects, Facts and some o : Object | ObjectInSet[o]) <br>
+ &nbsp &nbsp &nbsp Test3: (SomeObjects2, Facts and some o : Object | ObjectInSet[o]) <br>
+ &nbsp &nbsp &nbsp Test4: (ObjectDisconneted2, Facts and ObjectInSet[Obj1] and !ObjectInSet[Obj2]) <br>
+</body>
+</html>

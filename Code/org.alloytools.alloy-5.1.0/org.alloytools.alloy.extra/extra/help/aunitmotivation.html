@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>The Alloy Analyzer</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<STYLE TYPE="text/css">
+
+h1 {
+	font-family: 'Helvetica';
+	border-bottom: 3px solid #ff6766;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 17px;
+	text-align: left;
+	color: #6d6a6a;
+}
+a {
+	color: #1799d6;	
+	font-family: 'Helvetica';
+}
+
+a:hover {
+	color: #1799d6;
+}
+
+p {
+	color: #282B2B;
+	font-family: 'Helvetica';
+	font-size: 12px;
+	line-height: 13px;
+}
+
+h2 {
+	font-family: 'verdana';
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 13px;
+	text-align: left;
+	margin-left: 1cm;
+	padding-left: 0.5cm;
+	border-left: 3px solid #b1b3b5;
+}
+
+ol {
+    counter-reset: li; /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    *list-style: decimal; /* Keep using default numbering for IE6/7 */
+    font: 15px 'trebuchet MS', 'lucida sans';
+    padding: 0;
+    margin-bottom: 4em;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+ol ol {
+    margin: 0 0 0 2em; /* Add some left margin for inner lists */
+}
+
+h3 {
+	font-family: 'Helvetica';
+	border-bottom: 1px dashed #ff6766;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 17px;
+	text-align: left;
+	color: #6d6a6a;
+}
+
+h4 {
+	font-family: 'Helvetica';
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 25px;
+	margin: 5px;
+	text-align: center;
+	color: 668899;
+}
+
+h5 {
+    border-bottom: 1px dashed #8c8b8b;
+}
+
+</STYLE>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<h4>AUnit Tutorial</font><font color=#536d7a><br><strong>Motivation</strong></h4>
+
+<h1>Motivation for AUnit</h1>
+<p>Common ad-hoc approaches to testing Alloy models include: building formulas to test the relationship between predicates and enumerating instances -- looking for either the presence or abscene of a particular instance. AUnit is intended to bring a uniform verification process to Alloy. Our valuation structure allows users to continue to test Alloy models in the same spirit as the ad-hoc approaches, but with a built in infrastructure to help the user target specfic instances or formulas.</p>
+<h5></h5>
+<p>In Alloy, the visual instances that get enumerated over are satisfying solutions found by the back-end SAT solvers for the formulas being invoked. The relation-based nature of Alloy often enables these instances to be displayed in an approachable nature; i.e. a binary relation is a graph. AUnit test cases leverage these ideas to bring testing to Alloy. Our valuations model these instances and our test case commands enable a tester to specify whether these instances should or should not have been allowed by various Alloy formulas.</p>
+</body>
+</html>
