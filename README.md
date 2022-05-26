@@ -1,5 +1,5 @@
 # Reach Source Code and Example Models
-This github repo contains the source code to Reach as well as a collection of example models (under Model).
+This github repo contains the source code to Reach as well as a collection of example models (under Model). The examples models include those used with Reach as well as two sets of benchmarks - BaseE and BaseC. The benchmarks are intended to be run on the [Alloy Analyzer](https://github.com/AlloyTools/org.alloytools.alloy).
 
 `Reach` is an extension to the [Alloy Analyzer](https://github.com/AlloyTools/org.alloytools.alloy) with support foer enumerating scenarios by size.
 
